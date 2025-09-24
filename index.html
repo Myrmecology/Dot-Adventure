@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot Adventure - Professional Maze Game</title>
+    <meta name="description" content="A professional Pac-Man style maze game with modern features">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1>DOT ADVENTURE</h1>
+            <div class="score-display">
+                <span id="score">Score: 0</span>
+                <span id="lives">Lives: 3</span>
+                <span id="level">Level: 1</span>
+            </div>
+        </header>
+        
+        <main class="game-main">
+            <div id="game-canvas"></div>
+            <div class="game-controls">
+                <p>Use Arrow Keys or WASD to Move</p>
+                <p>Press SPACE to Pause</p>
+            </div>
+        </main>
+        
+        <footer class="game-footer">
+            <div class="game-info">
+                <p>&copy; 2025 Dot Adventure | Built with Phaser.js</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Load Phaser.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+    
+    <!-- Load our game modules -->
+    <script src="src/systems/SoundManager.js"></script>
+    <script src="src/systems/ScoreSystem.js"></script>
+    <script src="src/systems/LevelManager.js"></script>
+    <script src="src/entities/Pellet.js"></script>
+    <script src="src/entities/Ghost.js"></script>
+    <script src="src/entities/Player.js"></script>
+    <script src="src/scenes/TitleScreen.js"></script>
+    <script src="src/scenes/GameScene.js"></script>
+    <script src="src/scenes/GameOverScene.js"></script>
+    
+    <!-- Main game initialization -->
+    <script src="main.js"></script>
+</body>
+</html>
