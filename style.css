@@ -1,0 +1,215 @@
+/* ===== DOT ADVENTURE - PROFESSIONAL GAME STYLING ===== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', monospace;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+    color: #00ff41;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    max-width: 1200px;
+    position: relative;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #00ff41;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+}
+
+/* ===== HEADER STYLING ===== */
+.game-header {
+    width: 100%;
+    padding: 15px 30px;
+    background: linear-gradient(90deg, #001122 0%, #003366 50%, #001122 100%);
+    border-bottom: 2px solid #00ff41;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.game-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 65, 0.1) 50%, transparent 100%);
+    animation: headerGlow 3s ease-in-out infinite;
+}
+
+@keyframes headerGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+.game-header h1 {
+    font-size: 2.5em;
+    font-weight: 900;
+    text-shadow: 0 0 10px #00ff41;
+    letter-spacing: 3px;
+    z-index: 2;
+    position: relative;
+}
+
+.score-display {
+    display: flex;
+    gap: 30px;
+    font-size: 1.2em;
+    font-weight: 700;
+    z-index: 2;
+    position: relative;
+}
+
+.score-display span {
+    padding: 8px 15px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #00ff41;
+    border-radius: 5px;
+    text-shadow: 0 0 5px #00ff41;
+    min-width: 120px;
+    text-align: center;
+}
+
+/* ===== MAIN GAME AREA ===== */
+.game-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+
+#game-canvas {
+    border: 3px solid #00ff41;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+    background: #000;
+    border-radius: 8px;
+    position: relative;
+}
+
+#game-canvas::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #00ff41, #0080ff, #ff0080, #00ff41);
+    border-radius: 10px;
+    z-index: -1;
+    animation: borderRotate 4s linear infinite;
+}
+
+@keyframes borderRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== GAME CONTROLS ===== */
+.game-controls {
+    margin-top: 20px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+.game-controls p {
+    font-size: 1em;
+    margin: 5px 0;
+    text-shadow: 0 0 3px #00ff41;
+}
+
+/* ===== FOOTER STYLING ===== */
+.game-footer {
+    width: 100%;
+    padding: 10px 30px;
+    background: linear-gradient(90deg, #001122 0%, #003366 50%, #001122 100%);
+    border-top: 2px solid #00ff41;
+    text-align: center;
+}
+
+.game-info p {
+    font-size: 0.9em;
+    opacity: 0.7;
+    text-shadow: 0 0 3px #00ff41;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .game-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .game-header h1 {
+        font-size: 2em;
+    }
+    
+    .score-display {
+        gap: 15px;
+        font-size: 1em;
+    }
+    
+    .score-display span {
+        min-width: 100px;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-header h1 {
+        font-size: 1.5em;
+    }
+    
+    .score-display {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .game-controls p {
+        font-size: 0.9em;
+    }
+}
+
+/* ===== LOADING AND TRANSITION EFFECTS ===== */
+.game-container {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: scale(0.95);
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
