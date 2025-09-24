@@ -1,0 +1,180 @@
+# Node.js Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Security & Authentication
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+*.jks
+*.keystore
+.ssh/
+.gnupg/
+secrets/
+credentials/
+auth/
+tokens/
+
+# YubiKey & Hardware Security
+yubikey.log
+ykman.log
+.yubico/
+*.u2f
+*.fido
+hardware-tokens/
+smart-cards/
+
+# Cryptographic Materials
+*.asc
+*.gpg
+*.sig
+keyring/
+private-keys/
+public-keys/
+certificates/
+ca-bundle/
+
+# Build Outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+.vuepress/dist/
+coverage/
+*.tgz
+*.tar.gz
+
+# Electron Build
+electron-builder-output/
+releases/
+app-builds/
+packaged/
+
+# Development Tools
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating System
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Windows Security
+NTUSER.DAT*
+ntuser.dat*
+System Volume Information/
+$RECYCLE.BIN/
+.fuse_hidden*
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.cache
+.cache/
+tmp/
+temp/
+
+# Runtime & Process
+*.pid
+*.seed
+*.pid.lock
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Testing & Coverage
+.nyc_output/
+coverage/
+*.lcov
+.jest/
+test-results/
+playwright-report/
+
+# Databases & Storage
+*.sqlite
+*.sqlite3
+*.db
+*.mdb
+data/
+storage/
+
+# Backup Files
+*.bak
+*.backup
+*.old
+*.orig
+*~
+
+# IDE & Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.atom/
+.brackets.json
+
+# Package Managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnp.js
+.pnp.cjs
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime
+.npm
+.eslintcache
+.stylelintcache
+.parcel-cache/
+
+# Miscellaneous
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.tsbuildinfo
+.eslintcache
+
+# Security Scans
+.snyk
+security-report.json
+vulnerability-report.json
