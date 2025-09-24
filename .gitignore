@@ -178,3 +178,12 @@ lerna-debug.log*
 .snyk
 security-report.json
 vulnerability-report.json
+
+# Game Development
+*.atlas.tmp
+*.atlas.meta
+audio-temp/
+sprite-cache/
+texture-cache/
+game-saves/
+player-data/

@@ -1,0 +1,34 @@
+{
+  "name": "dot-adventure",
+  "version": "1.0.0",
+  "description": "A professional Pac-Man style game built with Phaser.js",
+  "main": "main.js",
+  "scripts": {
+    "dev": "live-server --port=3000 --host=localhost --open=/",
+    "start": "live-server --port=3000 --host=localhost --open=/",
+    "build": "echo 'Build process - ready for deployment'",
+    "test": "echo 'No tests specified yet'"
+  },
+  "keywords": [
+    "game",
+    "phaser",
+    "javascript",
+    "arcade",
+    "maze"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "phaser": "^3.70.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "your-repo-url-here"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
