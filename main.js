@@ -4,8 +4,8 @@ class DotAdventure {
     constructor() {
         this.config = {
             type: Phaser.AUTO,
-            width: 1000,
-            height: 700,
+            width: 850,
+            height: 760,
             parent: 'game-canvas',
             backgroundColor: '#000000',
             pixelArt: true,

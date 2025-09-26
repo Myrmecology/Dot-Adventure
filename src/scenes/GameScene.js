@@ -293,7 +293,7 @@ class GameScene extends Phaser.Scene {
         // Check pellet collisions
         if (this.player && this.player.isAlive()) {
             const playerPos = this.player.getPosition();
-            const eatenPellets = this.pelletManager.checkPlayerCollision(playerPos.x, playerPos.y, 12);
+            const eatenPellets = this.pelletManager.checkPlayerCollision(playerPos.x, playerPos.y, 16);
             
             eatenPellets.forEach(pellet => {
                 if (pellet.isPowerPellet()) {
@@ -383,6 +383,15 @@ class GameScene extends Phaser.Scene {
             if (this.player) {
                 // Temporarily disable collision detection
                 this.player.debugFreeMove = !this.player.debugFreeMove;
+            }
+        }
+        
+        // Debug key to check spawn positions
+        if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey('G'))) {
+            console.log('🐛 Debug: Game state');
+            this.levelManager.debugMaze();
+            if (this.player) {
+                this.player.debug();
             }
         }
     }

@@ -20,6 +20,9 @@ class LevelManager {
             powerPelletsPerLevel: 4
         };
 
+        // Embedded level data
+        this.levelLayouts = this.createLevelLayouts();
+
         // Maze symbols
         this.WALL = 1;
         this.PELLET = 2;
@@ -29,6 +32,36 @@ class LevelManager {
         this.GHOST_SPAWN = 5;
 
         console.log('🗺️ LevelManager initialized');
+    }
+
+    createLevelLayouts() {
+        // Simple, working level layouts
+        return {
+            1: [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,1,1,3,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2,1,1,1,2,1],
+                [1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1],
+                [1,1,1,1,1,2,1,1,1,1,1,0,1,0,1,1,1,1,1,2,1,1,1,1,1],
+                [1,1,1,1,1,2,1,0,0,0,0,0,0,0,0,0,0,0,1,2,1,1,1,1,1],
+                [1,1,1,1,1,2,1,0,1,1,0,0,5,0,0,1,1,0,1,2,1,1,1,1,1],
+                [0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0],
+                [1,1,1,1,1,2,1,0,1,0,0,0,0,0,0,0,1,0,1,2,1,1,1,1,1],
+                [1,1,1,1,1,2,1,0,1,1,1,1,1,1,1,1,1,0,1,2,1,1,1,1,1],
+                [1,1,1,1,1,2,1,0,0,0,0,0,0,0,0,0,0,0,1,2,1,1,1,1,1],
+                [1,1,1,1,1,2,1,1,1,1,1,0,1,0,1,1,1,1,1,2,1,1,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,1,1,2,1],
+                [1,3,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,3,1],
+                [1,1,1,2,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2,1,2,1,1,1],
+                [1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1],
+                [1,2,1,1,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ]
+        };
     }
 
     // Generate a new level
@@ -41,20 +74,88 @@ class LevelManager {
         this.powerPellets = [];
         this.ghostSpawns = [];
         
-        // Create base maze structure
-        this.createBaseMaze();
-        
-        // Add pellets and power pellets
-        this.placePellets();
-        
-        // Set spawn points
-        this.setSpawnPoints();
-        
-        // Apply level-specific modifications
-        this.applyLevelModifications();
+        // Load level from JSON or create procedural level
+        this.loadLevelData(levelNumber);
         
         console.log(`✅ Level ${levelNumber} generated with ${this.totalPellets} pellets`);
         return this.maze;
+    }
+
+    async loadLevelData(levelNumber) {
+        try {
+            // Try to load JSON level file
+            const response = await fetch(`assets/levels/level${levelNumber}.json`);
+            if (response.ok) {
+                const levelData = await response.json();
+                this.createLevelFromJSON(levelData);
+            } else {
+                // Fallback to procedural generation
+                this.createProceduralLevel();
+            }
+        } catch (error) {
+            console.warn(`Failed to load level ${levelNumber}, using procedural generation:`, error);
+            this.createProceduralLevel();
+        }
+    }
+
+    createLevelFromJSON(levelData) {
+        console.log('📄 Loading level from JSON data');
+        
+        // Use layout from JSON
+        this.maze = levelData.layout.map(row => [...row]);
+        this.config.mazeWidth = levelData.width;
+        this.config.mazeHeight = levelData.height;
+        this.config.tileSize = levelData.tileSize || 32;
+        
+        // Find spawn points and count pellets
+        this.parseLayoutData();
+    }
+
+    parseLayoutData() {
+        this.totalPellets = 0;
+        this.powerPellets = [];
+        this.ghostSpawns = [];
+        
+        for (let y = 0; y < this.maze.length; y++) {
+            for (let x = 0; x < this.maze[y].length; x++) {
+                const cell = this.maze[y][x];
+                
+                if (cell === 2) { // Normal pellet
+                    this.totalPellets++;
+                } else if (cell === 3) { // Power pellet
+                    this.totalPellets++;
+                    this.powerPellets.push({ x, y });
+                } else if (cell === 4) { // Player spawn
+                    this.playerSpawn = {
+                        x: x * this.config.tileSize + this.config.tileSize / 2,
+                        y: y * this.config.tileSize + this.config.tileSize / 2
+                    };
+                    // Replace player spawn with empty space
+                    this.maze[y][x] = 0;
+                } else if (cell === 5) { // Ghost spawn
+                    const colors = ['red', 'pink', 'cyan', 'orange'];
+                    this.ghostSpawns.push({
+                        x: x * this.config.tileSize + this.config.tileSize / 2,
+                        y: y * this.config.tileSize + this.config.tileSize / 2,
+                        color: colors[this.ghostSpawns.length % colors.length]
+                    });
+                    // Replace ghost spawn with empty space
+                    this.maze[y][x] = 0;
+                }
+            }
+        }
+        
+        console.log(`📊 Found player spawn at: ${this.playerSpawn.x}, ${this.playerSpawn.y}`);
+        console.log(`📊 Found ${this.ghostSpawns.length} ghost spawns`);
+        console.log(`📊 Found ${this.totalPellets} total pellets`);
+    }
+
+    createProceduralLevel() {
+        // Fallback to original procedural generation
+        this.createBaseMaze();
+        this.placePellets();
+        this.setSpawnPoints();
+        this.applyLevelModifications();
     }
 
     createBaseMaze() {

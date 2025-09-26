@@ -258,6 +258,11 @@ class SoundManager {
 
     // Cleanup
     destroy() {
+        if (this.audioContext) {
+            this.audioContext.close().then(() => {
+                console.log('🔇 Audio context closed');
+            });
+        }
         this.sounds = {};
         console.log('🔇 SoundManager destroyed');
     }

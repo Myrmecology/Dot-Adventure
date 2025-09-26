@@ -55,7 +55,7 @@ class Player {
 
     createVisualEffects() {
         // Create glow effect
-        this.glowEffect = this.scene.add.circle(this.sprite.x, this.sprite.y, 12, 0xffff00, 0.3);
+        this.glowEffect = this.scene.add.circle(this.sprite.x, this.sprite.y, 18, 0xffff00, 0.3);
         this.glowEffect.setBlendMode(Phaser.BlendModes.ADD);
         
         // Create trail effect
@@ -63,7 +63,7 @@ class Player {
         this.maxTrailLength = 8;
         
         // Power-up effect (initially invisible)
-        this.powerEffect = this.scene.add.circle(this.sprite.x, this.sprite.y, 15, 0xff8800, 0);
+        this.powerEffect = this.scene.add.circle(this.sprite.x, this.sprite.y, 22, 0xff8800, 0);
         this.powerEffect.setBlendMode(Phaser.BlendModes.ADD);
     }
 
@@ -114,7 +114,9 @@ class Player {
 
         // Try to change direction if requested
         if (this.nextDirection.x !== 0 || this.nextDirection.y !== 0) {
-            if (this.canMove(currentX, currentY, this.nextDirection)) {
+            const canMoveNext = this.canMove(currentX, currentY, this.nextDirection);
+            
+            if (canMoveNext) {
                 this.direction = { ...this.nextDirection };
                 this.nextDirection = { x: 0, y: 0 };
                 this.isMoving = true;
@@ -166,7 +168,9 @@ class Player {
         }
         
         const levelManager = this.scene.levelManager;
-        if (!levelManager) return true; // Allow movement if no level manager
+        if (!levelManager) {
+            return true; // Allow movement if no level manager
+        }
 
         // Calculate the position we're trying to move to
         const buffer = 8; // Collision buffer
@@ -183,11 +187,13 @@ class Player {
         ];
 
         // If any point is not a wall, we can move
-        return points.some(point => !levelManager.isWall(point.x, point.y));
+        const canMove = points.some(point => !levelManager.isWall(point.x, point.y));
+        
+        return canMove;
     }
 
     snapToGrid() {
-        const tileSize = this.scene.levelManager?.getTileSize() || 20;
+        const tileSize = this.scene.levelManager?.getTileSize() || 32;
         const snappedX = Math.round(this.sprite.x / tileSize) * tileSize + tileSize / 2;
         const snappedY = Math.round(this.sprite.y / tileSize) * tileSize + tileSize / 2;
         this.sprite.setPosition(snappedX, snappedY);
@@ -454,6 +460,7 @@ class Player {
         console.log('Dead:', this.isDead);
         console.log('Invulnerable:', this.isInvulnerable);
         console.log('Facing:', this.facing);
+        console.log('Debug Free Move:', this.debugFreeMove);
         console.log('==================');
     }
 }
