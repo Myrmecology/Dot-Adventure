@@ -13,7 +13,7 @@ class LevelManager {
         
         // Level configuration
         this.config = {
-            tileSize: 20,
+            tileSize: 32,
             mazeWidth: 25,
             mazeHeight: 23,
             pelletsPerLevel: 200,
