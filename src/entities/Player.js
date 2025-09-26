@@ -148,14 +148,24 @@ class Player {
 
     canMove(x, y, direction) {
         const levelManager = this.scene.levelManager;
-        if (!levelManager) return false;
+        if (!levelManager) return true; // Allow movement if no level manager
 
         // Calculate the position we're trying to move to
-        const buffer = 4; // Collision buffer
+        const buffer = 8; // Collision buffer
         const checkX = x + (direction.x * buffer);
         const checkY = y + (direction.y * buffer);
 
-        return !levelManager.isWall(checkX, checkY);
+        // Check multiple points for better collision detection
+        const points = [
+            { x: checkX - 6, y: checkY - 6 },
+            { x: checkX + 6, y: checkY - 6 },
+            { x: checkX - 6, y: checkY + 6 },
+            { x: checkX + 6, y: checkY + 6 },
+            { x: checkX, y: checkY }
+        ];
+
+        // If any point is not a wall, we can move
+        return points.some(point => !levelManager.isWall(point.x, point.y));
     }
 
     snapToGrid() {
