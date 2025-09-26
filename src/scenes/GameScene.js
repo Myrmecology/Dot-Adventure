@@ -209,7 +209,8 @@ class GameScene extends Phaser.Scene {
         this.debugKeys = {
             nextLevel: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N),
             invincible: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I),
-            addScore: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
+            addScore: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
+            freeMove: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F)
         };
     }
 
@@ -375,6 +376,14 @@ class GameScene extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.debugKeys.addScore)) {
             console.log('🐛 Debug: Add score');
             this.scoreSystem.addScore(1000, 'bonus');
+        }
+        
+        if (Phaser.Input.Keyboard.JustDown(this.debugKeys.freeMove)) {
+            console.log('🐛 Debug: Toggle free movement');
+            if (this.player) {
+                // Temporarily disable collision detection
+                this.player.debugFreeMove = !this.player.debugFreeMove;
+            }
         }
     }
 
@@ -611,15 +620,30 @@ class GameScene extends Phaser.Scene {
 
     // Game over handling
     onPlayerDied() {
-        const remainingLives = DotAdventure.removeLife();
+        const remainingLives = DotAdventure.getLives() - 1;
+        DotAdventure.setLives(remainingLives);
         
         if (remainingLives <= 0) {
             this.gameOver();
         } else {
+            // Show respawn message
+            const respawnText = this.add.text(
+                this.sys.game.config.width / 2,
+                this.sys.game.config.height / 2,
+                `Lives Remaining: ${remainingLives}\nRespawning in 3 seconds...`,
+                {
+                    fontSize: '24px',
+                    fontFamily: 'Orbitron',
+                    fill: '#ff4444',
+                    align: 'center'
+                }
+            ).setOrigin(0.5);
+            
             // Respawn player after delay
-            this.time.delayedCall(2000, () => {
+            this.time.delayedCall(3000, () => {
                 if (this.player) {
                     this.player.respawn();
+                    respawnText.destroy();
                 }
             });
         }

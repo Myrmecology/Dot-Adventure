@@ -7,9 +7,9 @@ class Player {
         this.startY = y;
         
         // Create player sprite (circle for now, will be visual later)
-        this.sprite = this.scene.add.circle(x, y, 8, 0xffff00);
+        this.sprite = this.scene.add.circle(x, y, 12, 0xffff00);
         this.scene.physics.add.existing(this.sprite);
-        this.sprite.body.setCircle(8);
+        this.sprite.body.setCircle(12);
         this.sprite.body.setCollideWorldBounds(false);
         
         // Player properties
@@ -29,6 +29,9 @@ class Player {
         // Movement buffer for smooth direction changes
         this.turnBuffer = 5; // pixels before turn point
         this.lastValidPosition = { x: x, y: y };
+        
+        // Debug properties
+        this.debugFreeMove = false;
         
         // Input setup
         this.setupInput();
@@ -116,6 +119,16 @@ class Player {
                 this.nextDirection = { x: 0, y: 0 };
                 this.isMoving = true;
                 this.updateFacing();
+            } else if (!this.isMoving) {
+                // If not currently moving, try to start moving in the requested direction
+                // with a more lenient check
+                const lenientCheck = this.canMove(currentX + this.nextDirection.x * 2, currentY + this.nextDirection.y * 2, this.nextDirection);
+                if (lenientCheck) {
+                    this.direction = { ...this.nextDirection };
+                    this.nextDirection = { x: 0, y: 0 };
+                    this.isMoving = true;
+                    this.updateFacing();
+                }
             }
         }
 
@@ -147,6 +160,11 @@ class Player {
     }
 
     canMove(x, y, direction) {
+        // Debug free movement
+        if (this.debugFreeMove) {
+            return true;
+        }
+        
         const levelManager = this.scene.levelManager;
         if (!levelManager) return true; // Allow movement if no level manager
 
@@ -339,6 +357,9 @@ class Player {
         const soundManager = this.scene.soundManager;
         soundManager?.playPlayerDeath();
         
+        // Notify scene of player death
+        this.scene.events.emit('playerDied');
+        
         // Death animation
         this.scene.tweens.add({
             targets: this.sprite,
@@ -348,7 +369,7 @@ class Player {
             duration: 1000,
             ease: 'Power2.in',
             onComplete: () => {
-                this.respawn();
+                // Scene will handle respawn timing
             }
         });
 

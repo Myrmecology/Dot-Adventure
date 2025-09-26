@@ -7,6 +7,7 @@ class SoundManager {
         this.musicVolume = 0.3;
         this.sfxVolume = 0.5;
         this.isEnabled = true;
+        this.audioContext = null;
         
         console.log('🔊 SoundManager initialized');
     }
@@ -20,7 +21,37 @@ class SoundManager {
     create() {
         // Create procedural sounds using Web Audio API
         this.createProceduralSounds();
+        
+        // Initialize audio context on first user interaction
+        this.initializeAudioContext();
+        
         console.log('✅ SoundManager created with procedural sounds');
+    }
+
+    initializeAudioContext() {
+        // Initialize audio context when user first interacts
+        const initAudio = () => {
+            if (!this.audioContext) {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                console.log('🔊 Audio context initialized');
+            }
+            
+            if (this.audioContext.state === 'suspended') {
+                this.audioContext.resume().then(() => {
+                    console.log('🔊 Audio context resumed');
+                });
+            }
+            
+            // Remove event listeners after first activation
+            document.removeEventListener('click', initAudio);
+            document.removeEventListener('keydown', initAudio);
+            document.removeEventListener('touchstart', initAudio);
+        };
+        
+        // Listen for user interaction
+        document.addEventListener('click', initAudio);
+        document.addEventListener('keydown', initAudio);
+        document.addEventListener('touchstart', initAudio);
     }
 
     createProceduralSounds() {
@@ -68,23 +99,32 @@ class SoundManager {
         if (!this.isEnabled) return;
 
         try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            // Create audio context on first user interaction
+            if (!this.audioContext) {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Resume context if suspended (required for Chrome)
+            if (this.audioContext.state === 'suspended') {
+                this.audioContext.resume();
+            }
+            
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
 
             oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            gainNode.connect(this.audioContext.destination);
 
-            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
             oscillator.type = 'square'; // Retro square wave
 
             // Envelope for smoother sound
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(this.sfxVolume * 0.3, audioContext.currentTime + 0.01);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(this.sfxVolume * 0.3, this.audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
 
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
+            oscillator.start(this.audioContext.currentTime);
+            oscillator.stop(this.audioContext.currentTime + duration);
 
         } catch (error) {
             console.warn('🔇 Audio playback failed:', error);
@@ -95,23 +135,31 @@ class SoundManager {
         if (!this.isEnabled) return;
 
         try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            // Use existing audio context or create new one
+            if (!this.audioContext) {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            if (this.audioContext.state === 'suspended') {
+                this.audioContext.resume();
+            }
+            
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
 
             oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            gainNode.connect(this.audioContext.destination);
 
             oscillator.type = 'sawtooth';
-            oscillator.frequency.setValueAtTime(startFreq, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(endFreq, audioContext.currentTime + duration);
+            oscillator.frequency.setValueAtTime(startFreq, this.audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(endFreq, this.audioContext.currentTime + duration);
 
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(this.sfxVolume * 0.4, audioContext.currentTime + 0.01);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(this.sfxVolume * 0.4, this.audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
 
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
+            oscillator.start(this.audioContext.currentTime);
+            oscillator.stop(this.audioContext.currentTime + duration);
 
         } catch (error) {
             console.warn('🔇 Sweep playback failed:', error);
