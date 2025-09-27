@@ -13,7 +13,7 @@ class Player {
         this.sprite.body.setCollideWorldBounds(false);
         
         // Player properties
-        this.speed = 100;
+        this.speed = 120;
         this.direction = { x: 0, y: 0 };
         this.nextDirection = { x: 0, y: 0 };
         this.isMoving = false;
@@ -78,7 +78,6 @@ class Player {
         this.updateAnimation(deltaTime);
         this.updateVisualEffects(deltaTime);
         this.updateInvulnerability(deltaTime);
-        // Note: Collision checking is now handled by GameScene
     }
 
     handleInput() {
@@ -114,45 +113,29 @@ class Player {
 
         // Try to change direction if requested
         if (this.nextDirection.x !== 0 || this.nextDirection.y !== 0) {
-            const canMoveNext = this.canMove(currentX, currentY, this.nextDirection);
-            
-            if (canMoveNext) {
+            if (this.canChangeDirection(currentX, currentY, this.nextDirection)) {
                 this.direction = { ...this.nextDirection };
                 this.nextDirection = { x: 0, y: 0 };
                 this.isMoving = true;
                 this.updateFacing();
-            } else if (!this.isMoving) {
-                // If not currently moving, try to start moving in the requested direction
-                // with a more lenient check
-                const lenientCheck = this.canMove(currentX + this.nextDirection.x * 4, currentY + this.nextDirection.y * 4, this.nextDirection);
-                if (lenientCheck) {
-                    this.direction = { ...this.nextDirection };
-                    this.nextDirection = { x: 0, y: 0 };
-                    this.isMoving = true;
-                    this.updateFacing();
-                }
             }
         }
 
         // Move in current direction if possible
-        if (this.isMoving && this.direction.x === 0 && this.direction.y === 0) {
-            this.isMoving = false;
-        }
-
         if (this.isMoving) {
-            const nextX = currentX + (this.direction.x * this.speed * deltaTime / 1000);
-            const nextY = currentY + (this.direction.y * this.speed * deltaTime / 1000);
+            const moveDistance = this.speed * deltaTime / 1000;
+            const nextX = currentX + (this.direction.x * moveDistance);
+            const nextY = currentY + (this.direction.y * moveDistance);
 
             // Check if we can continue moving
-            if (this.canMove(nextX, nextY, this.direction)) {
+            if (this.canMoveToPosition(nextX, nextY)) {
                 this.sprite.setPosition(nextX, nextY);
                 this.lastValidPosition = { x: nextX, y: nextY };
                 this.addTrailPoint(nextX, nextY);
             } else {
-                // Hit a wall, stop moving
+                // Hit a wall, stop moving and snap to grid
                 this.isMoving = false;
                 this.direction = { x: 0, y: 0 };
-                // Snap to grid
                 this.snapToGrid();
             }
         }
@@ -161,40 +144,54 @@ class Player {
         this.checkTunnels();
     }
 
-    canMove(x, y, direction) {
+    canChangeDirection(x, y, direction) {
         // Debug free movement
-        if (this.debugFreeMove) {
-            return true;
-        }
+        if (this.debugFreeMove) return true;
         
         const levelManager = this.scene.levelManager;
-        if (!levelManager) {
-            return true; // Allow movement if no level manager
-        }
+        if (!levelManager) return true;
 
-        // Calculate the position we're trying to move to
-        const buffer = 6; // Smaller collision buffer for better movement
-        const checkX = x + (direction.x * buffer);
-        const checkY = y + (direction.y * buffer);
+        // Check if we can move a small distance in the new direction
+        const testDistance = 16; // One half tile
+        const testX = x + (direction.x * testDistance);
+        const testY = y + (direction.y * testDistance);
+        
+        return this.canMoveToPosition(testX, testY);
+    }
 
-        // Check center point and corners for collision
-        const points = [
-            { x: checkX, y: checkY }, // Center
-            { x: checkX - 8, y: checkY - 8 }, // Top-left
-            { x: checkX + 8, y: checkY - 8 }, // Top-right
-            { x: checkX - 8, y: checkY + 8 }, // Bottom-left
-            { x: checkX + 8, y: checkY + 8 }  // Bottom-right
+    canMoveToPosition(x, y) {
+        // Debug free movement
+        if (this.debugFreeMove) return true;
+        
+        const levelManager = this.scene.levelManager;
+        if (!levelManager) return true;
+
+        // Check just the center point with a small buffer
+        const buffer = 10; // Smaller buffer for more forgiving collision
+        
+        // Check the four cardinal points around the player
+        const checkPoints = [
+            { x: x, y: y }, // Center
+            { x: x - buffer, y: y }, // Left
+            { x: x + buffer, y: y }, // Right
+            { x: x, y: y - buffer }, // Top
+            { x: x, y: y + buffer }  // Bottom
         ];
 
         // All points must be clear of walls
-        return points.every(point => !levelManager.isWall(point.x, point.y));
+        return checkPoints.every(point => !levelManager.isWall(point.x, point.y));
     }
 
     snapToGrid() {
         const tileSize = this.scene.levelManager?.getTileSize() || 32;
-        const snappedX = Math.round(this.sprite.x / tileSize) * tileSize + tileSize / 2;
-        const snappedY = Math.round(this.sprite.y / tileSize) * tileSize + tileSize / 2;
+        const halfTile = tileSize / 2;
+        
+        // Snap to nearest tile center
+        const snappedX = Math.round((this.sprite.x - halfTile) / tileSize) * tileSize + halfTile;
+        const snappedY = Math.round((this.sprite.y - halfTile) / tileSize) * tileSize + halfTile;
+        
         this.sprite.setPosition(snappedX, snappedY);
+        this.lastValidPosition = { x: snappedX, y: snappedY };
     }
 
     checkTunnels() {
@@ -286,13 +283,8 @@ class Player {
         }
     }
 
-    // These methods are kept for backward compatibility but pellet collision is now handled in GameScene
-    checkCollisions() {
-        // Legacy method - collision checking now handled by GameScene for better coordination
-    }
-
+    // Called by GameScene when pellets are eaten
     onPelletEaten(pelletType) {
-        // This method is called by GameScene when a pellet is eaten
         const soundManager = this.scene.soundManager;
 
         if (pelletType === 'pellet') {
