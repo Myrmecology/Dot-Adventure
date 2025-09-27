@@ -60,6 +60,54 @@ class LevelManager {
                 [1,2,1,1,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1],
                 [1,2,2,2,2,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,2,2,2,2,1],
                 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ],
+            2: [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,1],
+                [1,3,1,2,1,2,1,1,2,1,1,1,1,1,1,1,2,1,1,2,1,2,1,3,1],
+                [1,2,1,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,1,2,1],
+                [1,2,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,2,1],
+                [1,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1],
+                [1,1,1,2,1,1,1,2,1,2,1,1,1,1,1,2,1,2,1,1,1,2,1,1,1],
+                [1,2,2,2,2,2,2,2,1,2,1,0,0,0,1,2,1,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,1,2,1,2,1,0,5,0,1,2,1,2,1,1,1,1,1,2,1],
+                [0,2,1,2,2,2,2,2,2,2,1,0,0,0,1,2,2,2,2,2,2,2,1,2,0],
+                [1,2,1,2,1,1,1,2,1,2,1,1,1,1,1,2,1,2,1,1,1,2,1,2,1],
+                [1,2,1,2,2,2,1,2,1,2,2,2,2,2,2,2,1,2,1,2,2,2,1,2,1],
+                [1,2,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,2,1],
+                [1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1],
+                [1,1,1,2,1,1,1,1,1,2,1,2,1,2,1,2,1,1,1,1,1,2,1,1,1],
+                [1,2,2,2,1,2,2,2,2,2,1,2,2,2,1,2,2,2,2,2,1,2,2,2,1],
+                [1,2,1,2,1,2,1,1,1,2,1,2,4,2,1,2,1,1,1,2,1,2,1,2,1],
+                [1,2,1,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,1,2,1],
+                [1,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,2,1],
+                [1,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,1],
+                [1,2,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,2,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ],
+            3: [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,3,2,2,2,1,2,2,2,1,2,2,2,2,2,1,2,2,2,1,2,2,2,3,1],
+                [1,2,1,1,2,1,2,1,2,1,2,1,1,1,2,1,2,1,2,1,2,1,1,2,1],
+                [1,2,1,2,2,2,2,1,2,2,2,1,2,1,2,2,2,1,2,2,2,2,1,2,1],
+                [1,2,1,2,1,1,2,1,1,1,2,1,2,1,2,1,1,1,2,1,1,2,1,2,1],
+                [1,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,1],
+                [1,1,1,2,1,2,1,1,1,2,1,1,1,1,1,2,1,1,1,2,1,2,1,1,1],
+                [1,2,2,2,1,2,1,2,2,2,1,0,0,0,1,2,2,2,1,2,1,2,2,2,1],
+                [1,2,1,2,1,2,1,2,1,2,1,0,5,0,1,2,1,2,1,2,1,2,1,2,1],
+                [0,2,1,2,2,2,2,2,1,2,0,0,0,0,0,2,1,2,2,2,2,2,1,2,0],
+                [1,2,1,2,1,2,1,2,1,2,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1],
+                [1,2,2,2,1,2,1,2,2,2,2,2,2,2,2,2,2,2,1,2,1,2,2,2,1],
+                [1,1,1,2,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,2,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,1,2,1,1,1,2,1,2,1,1,1,2,1,1,1,1,1,2,1],
+                [1,2,1,2,2,2,2,2,1,2,2,2,2,2,2,2,1,2,2,2,2,2,1,2,1],
+                [1,2,1,2,1,1,1,2,1,2,1,1,4,1,1,2,1,2,1,1,1,2,1,2,1],
+                [1,2,1,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,1,2,1],
+                [1,2,1,1,1,2,1,1,1,2,1,2,2,2,1,2,1,1,1,2,1,1,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,1,2,2,2,1,2,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,3,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
             ]
         };
     }
@@ -74,40 +122,28 @@ class LevelManager {
         this.powerPellets = [];
         this.ghostSpawns = [];
         
-        // Load level from JSON or create procedural level
-        this.loadLevelData(levelNumber);
+        // Load level from embedded data
+        this.loadLevelLayout(levelNumber);
         
         console.log(`✅ Level ${levelNumber} generated with ${this.totalPellets} pellets`);
+        console.log(`📍 Player spawn: ${this.playerSpawn.x}, ${this.playerSpawn.y}`);
         return this.maze;
     }
 
-    async loadLevelData(levelNumber) {
-        try {
-            // Try to load JSON level file
-            const response = await fetch(`assets/levels/level${levelNumber}.json`);
-            if (response.ok) {
-                const levelData = await response.json();
-                this.createLevelFromJSON(levelData);
-            } else {
-                // Fallback to procedural generation
-                this.createProceduralLevel();
-            }
-        } catch (error) {
-            console.warn(`Failed to load level ${levelNumber}, using procedural generation:`, error);
-            this.createProceduralLevel();
-        }
-    }
-
-    createLevelFromJSON(levelData) {
-        console.log('📄 Loading level from JSON data');
+    loadLevelLayout(levelNumber) {
+        // Use modulo to cycle through available levels
+        const availableLevels = Object.keys(this.levelLayouts);
+        const levelKey = availableLevels[(levelNumber - 1) % availableLevels.length];
+        const layout = this.levelLayouts[levelKey];
         
-        // Use layout from JSON
-        this.maze = levelData.layout.map(row => [...row]);
-        this.config.mazeWidth = levelData.width;
-        this.config.mazeHeight = levelData.height;
-        this.config.tileSize = levelData.tileSize || 32;
+        console.log(`📄 Loading level layout ${levelKey} for level ${levelNumber}`);
         
-        // Find spawn points and count pellets
+        // Copy the layout
+        this.maze = layout.map(row => [...row]);
+        this.config.mazeHeight = this.maze.length;
+        this.config.mazeWidth = this.maze[0].length;
+        
+        // Parse the layout for spawn points and pellets
         this.parseLayoutData();
     }
 
@@ -115,6 +151,7 @@ class LevelManager {
         this.totalPellets = 0;
         this.powerPellets = [];
         this.ghostSpawns = [];
+        this.playerSpawn = null;
         
         for (let y = 0; y < this.maze.length; y++) {
             for (let x = 0; x < this.maze[y].length; x++) {
@@ -130,7 +167,7 @@ class LevelManager {
                         x: x * this.config.tileSize + this.config.tileSize / 2,
                         y: y * this.config.tileSize + this.config.tileSize / 2
                     };
-                    // Replace player spawn with empty space
+                    // Replace player spawn with empty space so player can move
                     this.maze[y][x] = 0;
                 } else if (cell === 5) { // Ghost spawn
                     const colors = ['red', 'pink', 'cyan', 'orange'];
@@ -145,273 +182,37 @@ class LevelManager {
             }
         }
         
-        console.log(`📊 Found player spawn at: ${this.playerSpawn.x}, ${this.playerSpawn.y}`);
-        console.log(`📊 Found ${this.ghostSpawns.length} ghost spawns`);
-        console.log(`📊 Found ${this.totalPellets} total pellets`);
-    }
-
-    createProceduralLevel() {
-        // Fallback to original procedural generation
-        this.createBaseMaze();
-        this.placePellets();
-        this.setSpawnPoints();
-        this.applyLevelModifications();
-    }
-
-    createBaseMaze() {
-        const width = this.config.mazeWidth;
-        const height = this.config.mazeHeight;
+        // Fallback spawn if not found in layout
+        if (!this.playerSpawn) {
+            console.warn('⚠️ No player spawn found in layout, using fallback position');
+            this.playerSpawn = {
+                x: 12 * this.config.tileSize + this.config.tileSize / 2,
+                y: 20 * this.config.tileSize + this.config.tileSize / 2
+            };
+            // Ensure spawn area is clear
+            const gridX = Math.floor((this.playerSpawn.x - this.config.tileSize / 2) / this.config.tileSize);
+            const gridY = Math.floor((this.playerSpawn.y - this.config.tileSize / 2) / this.config.tileSize);
+            if (this.maze[gridY] && this.maze[gridY][gridX]) {
+                this.maze[gridY][gridX] = 0;
+            }
+        }
         
-        // Initialize maze with walls
-        for (let y = 0; y < height; y++) {
-            this.maze[y] = [];
-            for (let x = 0; x < width; x++) {
-                this.maze[y][x] = this.WALL;
-            }
+        // Ensure at least one ghost spawn
+        if (this.ghostSpawns.length === 0) {
+            console.warn('⚠️ No ghost spawns found in layout, adding fallback');
+            this.ghostSpawns.push({
+                x: 12 * this.config.tileSize + this.config.tileSize / 2,
+                y: 8 * this.config.tileSize + this.config.tileSize / 2,
+                color: 'red'
+            });
         }
-
-        // Create classic Pac-Man style maze pattern
-        this.createMazePattern();
         
-        // Ensure maze is properly connected
-        this.ensureConnectivity();
+        console.log(`📊 Player spawn: (${this.playerSpawn.x}, ${this.playerSpawn.y})`);
+        console.log(`📊 Ghost spawns: ${this.ghostSpawns.length}`);
+        console.log(`📊 Total pellets: ${this.totalPellets}`);
     }
 
-    createMazePattern() {
-        const width = this.config.mazeWidth;
-        const height = this.config.mazeHeight;
-
-        // Create corridors (simplified Pac-Man style layout)
-        // Horizontal corridors
-        for (let y = 1; y < height - 1; y += 2) {
-            for (let x = 1; x < width - 1; x++) {
-                if (y === 1 || y === height - 2 || y === Math.floor(height / 2)) {
-                    this.maze[y][x] = this.EMPTY;
-                }
-            }
-        }
-
-        // Vertical corridors
-        for (let x = 1; x < width - 1; x += 4) {
-            for (let y = 1; y < height - 1; y++) {
-                this.maze[y][x] = this.EMPTY;
-            }
-        }
-
-        // Central area (ghost house)
-        const centerX = Math.floor(width / 2);
-        const centerY = Math.floor(height / 2);
-        
-        for (let y = centerY - 2; y <= centerY + 2; y++) {
-            for (let x = centerX - 3; x <= centerX + 3; x++) {
-                if (x >= 0 && x < width && y >= 0 && y < height) {
-                    this.maze[y][x] = this.EMPTY;
-                }
-            }
-        }
-
-        // Side tunnels
-        const tunnelY = Math.floor(height / 2);
-        this.maze[tunnelY][0] = this.EMPTY;
-        this.maze[tunnelY][width - 1] = this.EMPTY;
-        
-        // Connect tunnels
-        for (let x = 0; x < width; x++) {
-            this.maze[tunnelY][x] = this.EMPTY;
-        }
-
-        // Add some vertical connections
-        for (let x = 3; x < width - 3; x += 6) {
-            for (let y = 3; y < height - 3; y++) {
-                if (this.maze[y - 1][x] === this.EMPTY || this.maze[y + 1][x] === this.EMPTY) {
-                    this.maze[y][x] = this.EMPTY;
-                }
-            }
-        }
-
-        // Create corners and turns
-        this.createCorners();
-    }
-
-    createCorners() {
-        const width = this.config.mazeWidth;
-        const height = this.config.mazeHeight;
-
-        // Add corner patterns for more interesting maze
-        const corners = [
-            { x: 3, y: 3 },
-            { x: width - 4, y: 3 },
-            { x: 3, y: height - 4 },
-            { x: width - 4, y: height - 4 }
-        ];
-
-        corners.forEach(corner => {
-            // Create L-shaped corridors from corners
-            for (let i = 0; i < 3; i++) {
-                if (corner.x + i < width) this.maze[corner.y][corner.x + i] = this.EMPTY;
-                if (corner.y + i < height) this.maze[corner.y + i][corner.x] = this.EMPTY;
-            }
-        });
-    }
-
-    ensureConnectivity() {
-        // Simple connectivity check - ensure all empty spaces connect to center
-        // This is a simplified version - a full implementation would use flood fill
-        const centerX = Math.floor(this.config.mazeWidth / 2);
-        const centerY = Math.floor(this.config.mazeHeight / 2);
-
-        // Make sure there's always a path from edges to center
-        for (let y = 1; y < this.config.mazeHeight - 1; y += 2) {
-            let hasConnection = false;
-            for (let x = 1; x < this.config.mazeWidth - 1; x++) {
-                if (this.maze[y][x] === this.EMPTY) {
-                    hasConnection = true;
-                    break;
-                }
-            }
-            if (!hasConnection) {
-                this.maze[y][centerX] = this.EMPTY;
-            }
-        }
-    }
-
-    placePellets() {
-        this.totalPellets = 0;
-        this.pelletCount = 0;
-
-        // Place regular pellets in all empty spaces
-        for (let y = 0; y < this.config.mazeHeight; y++) {
-            for (let x = 0; x < this.config.mazeWidth; x++) {
-                if (this.maze[y][x] === this.EMPTY) {
-                    this.maze[y][x] = this.PELLET;
-                    this.totalPellets++;
-                }
-            }
-        }
-
-        // Replace some pellets with power pellets
-        this.placePowerPellets();
-        
-        console.log(`🔸 Placed ${this.totalPellets} pellets, ${this.powerPellets.length} power pellets`);
-    }
-
-    placePowerPellets() {
-        const corners = [
-            { x: 2, y: 3 },
-            { x: this.config.mazeWidth - 3, y: 3 },
-            { x: 2, y: this.config.mazeHeight - 4 },
-            { x: this.config.mazeWidth - 3, y: this.config.mazeHeight - 4 }
-        ];
-
-        this.powerPellets = [];
-        
-        corners.forEach(corner => {
-            if (this.maze[corner.y] && 
-                this.maze[corner.y][corner.x] === this.PELLET) {
-                this.maze[corner.y][corner.x] = this.POWER_PELLET;
-                this.powerPellets.push({ x: corner.x, y: corner.y });
-            }
-        });
-    }
-
-    setSpawnPoints() {
-        // Player spawn (bottom center)
-        const playerX = Math.floor(this.config.mazeWidth / 2);
-        const playerY = this.config.mazeHeight - 4;
-        this.playerSpawn = { 
-            x: playerX * this.config.tileSize + this.config.tileSize / 2,
-            y: playerY * this.config.tileSize + this.config.tileSize / 2
-        };
-
-        // Clear pellet from player spawn
-        if (this.maze[playerY] && this.maze[playerY][playerX] !== this.WALL) {
-            this.maze[playerY][playerX] = this.EMPTY;
-        }
-
-        // Ghost spawns (center area)
-        const centerX = Math.floor(this.config.mazeWidth / 2);
-        const centerY = Math.floor(this.config.mazeHeight / 2);
-        
-        this.ghostSpawns = [
-            { x: centerX, y: centerY, color: 'red' },
-            { x: centerX - 1, y: centerY, color: 'pink' },
-            { x: centerX + 1, y: centerY, color: 'cyan' },
-            { x: centerX, y: centerY + 1, color: 'orange' }
-        ];
-
-        // Convert to pixel coordinates
-        this.ghostSpawns = this.ghostSpawns.map(spawn => ({
-            ...spawn,
-            x: spawn.x * this.config.tileSize + this.config.tileSize / 2,
-            y: spawn.y * this.config.tileSize + this.config.tileSize / 2
-        }));
-    }
-
-    applyLevelModifications() {
-        // Apply progressive difficulty changes based on level
-        const difficulty = Math.min(this.currentLevel, 10);
-
-        // Remove some pellets on higher levels (makes it harder)
-        if (this.currentLevel > 3) {
-            this.removeRandomPellets(Math.floor(this.totalPellets * 0.1 * (difficulty - 3)));
-        }
-
-        // Add maze complexity on higher levels
-        if (this.currentLevel > 5) {
-            this.addMazeComplexity();
-        }
-    }
-
-    removeRandomPellets(count) {
-        let removed = 0;
-        const attempts = count * 3; // Prevent infinite loop
-
-        for (let i = 0; i < attempts && removed < count; i++) {
-            const x = Math.floor(Math.random() * this.config.mazeWidth);
-            const y = Math.floor(Math.random() * this.config.mazeHeight);
-
-            if (this.maze[y] && this.maze[y][x] === this.PELLET) {
-                this.maze[y][x] = this.EMPTY;
-                this.totalPellets--;
-                removed++;
-            }
-        }
-    }
-
-    addMazeComplexity() {
-        // Add some additional walls to make navigation more challenging
-        const additions = Math.min(this.currentLevel - 5, 15);
-        
-        for (let i = 0; i < additions; i++) {
-            const x = Math.floor(Math.random() * (this.config.mazeWidth - 2)) + 1;
-            const y = Math.floor(Math.random() * (this.config.mazeHeight - 2)) + 1;
-
-            // Only add walls in empty spaces that won't block critical paths
-            if (this.maze[y][x] === this.EMPTY && !this.isSpawnArea(x, y)) {
-                this.maze[y][x] = this.WALL;
-            }
-        }
-    }
-
-    isSpawnArea(x, y) {
-        // Check if position is near spawn points
-        const playerSpawnGrid = {
-            x: Math.floor(this.playerSpawn.x / this.config.tileSize),
-            y: Math.floor(this.playerSpawn.y / this.config.tileSize)
-        };
-
-        const distToPlayer = Math.abs(x - playerSpawnGrid.x) + Math.abs(y - playerSpawnGrid.y);
-        if (distToPlayer < 3) return true;
-
-        // Check ghost spawn area
-        const centerX = Math.floor(this.config.mazeWidth / 2);
-        const centerY = Math.floor(this.config.mazeHeight / 2);
-        const distToCenter = Math.abs(x - centerX) + Math.abs(y - centerY);
-        
-        return distToCenter < 4;
-    }
-
-    // Pellet management
+    // Pellet management (These methods are used by Player.js for backward compatibility)
     eatPellet(x, y) {
         const gridX = Math.floor(x / this.config.tileSize);
         const gridY = Math.floor(y / this.config.tileSize);
@@ -457,7 +258,7 @@ class LevelManager {
         return null;
     }
 
-    // Level completion check
+    // Level completion check (backward compatibility)
     isLevelComplete() {
         return this.pelletCount >= this.totalPellets;
     }
@@ -499,6 +300,81 @@ class LevelManager {
         return this.totalPellets - this.pelletCount;
     }
 
+    getTotalPellets() {
+        return this.totalPellets;
+    }
+
+    // Apply level-specific modifications for higher levels
+    applyLevelModifications() {
+        // Apply progressive difficulty changes based on level
+        const difficulty = Math.min(this.currentLevel, 10);
+
+        // Remove some pellets on higher levels (makes it harder)
+        if (this.currentLevel > 3) {
+            this.removeRandomPellets(Math.floor(this.totalPellets * 0.05 * (difficulty - 3)));
+        }
+
+        // Add maze complexity on higher levels
+        if (this.currentLevel > 5) {
+            this.addMazeComplexity();
+        }
+    }
+
+    removeRandomPellets(count) {
+        let removed = 0;
+        const attempts = count * 3; // Prevent infinite loop
+
+        for (let i = 0; i < attempts && removed < count; i++) {
+            const x = Math.floor(Math.random() * this.config.mazeWidth);
+            const y = Math.floor(Math.random() * this.config.mazeHeight);
+
+            if (this.maze[y] && this.maze[y][x] === this.PELLET) {
+                this.maze[y][x] = this.EMPTY;
+                this.totalPellets--;
+                removed++;
+            }
+        }
+        
+        console.log(`🔧 Removed ${removed} pellets for increased difficulty`);
+    }
+
+    addMazeComplexity() {
+        // Add some additional walls to make navigation more challenging
+        const additions = Math.min(this.currentLevel - 5, 10);
+        
+        for (let i = 0; i < additions; i++) {
+            const x = Math.floor(Math.random() * (this.config.mazeWidth - 2)) + 1;
+            const y = Math.floor(Math.random() * (this.config.mazeHeight - 2)) + 1;
+
+            // Only add walls in empty spaces that won't block critical paths
+            if (this.maze[y][x] === this.EMPTY && !this.isSpawnArea(x, y)) {
+                this.maze[y][x] = this.WALL;
+            }
+        }
+        
+        console.log(`🔧 Added ${additions} wall complexity modifications`);
+    }
+
+    isSpawnArea(x, y) {
+        // Check if position is near spawn points
+        if (this.playerSpawn) {
+            const playerSpawnGrid = {
+                x: Math.floor(this.playerSpawn.x / this.config.tileSize),
+                y: Math.floor(this.playerSpawn.y / this.config.tileSize)
+            };
+
+            const distToPlayer = Math.abs(x - playerSpawnGrid.x) + Math.abs(y - playerSpawnGrid.y);
+            if (distToPlayer < 3) return true;
+        }
+
+        // Check ghost spawn area
+        const centerX = Math.floor(this.config.mazeWidth / 2);
+        const centerY = Math.floor(this.config.mazeHeight / 2);
+        const distToCenter = Math.abs(x - centerX) + Math.abs(y - centerY);
+        
+        return distToCenter < 4;
+    }
+
     // Debug and development helpers
     debugMaze() {
         console.log('=== MAZE DEBUG ===');
@@ -507,18 +383,46 @@ class LevelManager {
         console.log('Player spawn:', this.playerSpawn);
         console.log('Ghost spawns:', this.ghostSpawns);
         console.log('Maze size:', this.config.mazeWidth, 'x', this.config.mazeHeight);
+        console.log('Tile size:', this.config.tileSize);
         
-        // Print maze to console
-        const symbols = { 0: ' ', 1: '█', 2: '·', 3: '●' };
-        this.maze.forEach(row => {
-            console.log(row.map(cell => symbols[cell] || '?').join(''));
-        });
+        // Show a simple representation of the maze
+        console.log('Maze layout (first 12 rows):');
+        const symbols = { 0: '.', 1: '█', 2: '·', 3: '●', 4: 'P', 5: 'G' };
+        for (let y = 0; y < Math.min(12, this.maze.length); y++) {
+            const row = this.maze[y].map(cell => symbols[cell] || '?').join('');
+            console.log(`Row ${y.toString().padStart(2)}: ${row}`);
+        }
+        
+        // Show player spawn in grid coordinates
+        if (this.playerSpawn) {
+            const playerGridX = Math.floor((this.playerSpawn.x - this.config.tileSize / 2) / this.config.tileSize);
+            const playerGridY = Math.floor((this.playerSpawn.y - this.config.tileSize / 2) / this.config.tileSize);
+            console.log(`Player grid position: (${playerGridX}, ${playerGridY})`);
+            console.log(`Cell at player position: ${this.maze[playerGridY]?.[playerGridX]}`);
+        }
+        
+        console.log('==================');
     }
 
     // Reset for new level
     resetLevel() {
         this.pelletCount = 0;
         console.log('🔄 Level reset');
+    }
+
+    // Get level statistics
+    getLevelStats() {
+        return {
+            level: this.currentLevel,
+            totalPellets: this.totalPellets,
+            pelletCount: this.pelletCount,
+            remaining: this.getRemainingPellets(),
+            progress: this.getLevelProgress(),
+            powerPellets: this.powerPellets.length,
+            ghostSpawns: this.ghostSpawns.length,
+            mazeSize: `${this.config.mazeWidth}x${this.config.mazeHeight}`,
+            tileSize: this.config.tileSize
+        };
     }
 }
 
