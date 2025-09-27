@@ -87,10 +87,10 @@ class GameScene extends Phaser.Scene {
         // Create visual maze
         this.createMazeVisuals(maze);
         
-        // Create pellets from maze
+        // Create pellets from maze - IMPORTANT: Use level manager's tile size
         this.pelletManager.createPelletsFromMaze(maze, this.levelManager.getTileSize());
         
-        console.log(`🏗️ Level ${currentLevel} created`);
+        console.log(`🏗️ Level ${currentLevel} created with ${this.pelletManager.getTotalCount()} pellets`);
     }
 
     createMazeVisuals(maze) {
@@ -128,6 +128,7 @@ class GameScene extends Phaser.Scene {
     createEntities() {
         // Create player
         const playerSpawn = this.levelManager.getPlayerSpawn();
+        console.log('🎮 Creating player at:', playerSpawn);
         this.player = new Player(this, playerSpawn.x, playerSpawn.y);
         
         // Create ghosts
@@ -290,7 +291,7 @@ class GameScene extends Phaser.Scene {
             }
         });
         
-        // Check pellet collisions
+        // Check pellet collisions ONLY if player is alive and moving
         if (this.player && this.player.isAlive()) {
             const playerPos = this.player.getPosition();
             const eatenPellets = this.pelletManager.checkPlayerCollision(playerPos.x, playerPos.y, 16);
@@ -301,16 +302,18 @@ class GameScene extends Phaser.Scene {
                 }
             });
         }
-        
-        // Check level completion
-        if (this.pelletManager.isLevelComplete() && this.gameState === 'playing') {
-            this.events.emit('levelComplete');
-        }
     }
 
     updateGameLogic(deltaTime) {
         // Update level timer
         this.levelStartTime += deltaTime;
+        
+        // Check level completion ONLY after some time has passed and player has moved
+        if (this.gameState === 'playing' && this.levelStartTime > 1000) {
+            if (this.pelletManager.isLevelComplete()) {
+                this.events.emit('levelComplete');
+            }
+        }
         
         // Check for game over
         if (this.player && !this.player.isAlive() && DotAdventure.getLives() <= 0) {
@@ -393,6 +396,7 @@ class GameScene extends Phaser.Scene {
             if (this.player) {
                 this.player.debug();
             }
+            console.log('🐛 Pellet Manager Stats:', this.pelletManager.getStats());
         }
     }
 
@@ -407,7 +411,7 @@ class GameScene extends Phaser.Scene {
             this.soundManager.playGameStart();
         }
         
-        console.log(`🎯 Level ${DotAdventure.getLevel()} started`);
+        console.log(`🎯 Level ${DotAdventure.getLevel()} started with ${this.pelletManager.getTotalCount()} pellets`);
     }
 
     togglePause() {
@@ -526,6 +530,8 @@ class GameScene extends Phaser.Scene {
 
     // Level progression
     onLevelComplete() {
+        if (this.gameState !== 'playing') return; // Prevent multiple triggers
+        
         this.gameState = 'levelComplete';
         
         // Calculate level completion bonus
