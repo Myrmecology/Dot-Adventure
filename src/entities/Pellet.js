@@ -25,13 +25,13 @@ class Pellet {
     createSprite() {
         if (this.type === 'power') {
             // Power pellet - larger, different color
-            this.sprite = this.scene.add.circle(this.x, this.y, 6, 0xffff00);
-            this.baseSize = 6;
+            this.sprite = this.scene.add.circle(this.x, this.y, 8, 0xffff00);
+            this.baseSize = 8;
             this.glowColor = 0xffa500;
         } else {
             // Normal pellet - small dot
-            this.sprite = this.scene.add.circle(this.x, this.y, 2, 0xffff88);
-            this.baseSize = 2;
+            this.sprite = this.scene.add.circle(this.x, this.y, 3, 0xffff88);
+            this.baseSize = 3;
             this.glowColor = 0xffffaa;
         }
         
@@ -42,14 +42,14 @@ class Pellet {
     createVisualEffects() {
         // Create glow effect for power pellets
         if (this.type === 'power') {
-            this.glowEffect = this.scene.add.circle(this.x, this.y, 12, this.glowColor, 0.3);
+            this.glowEffect = this.scene.add.circle(this.x, this.y, 16, this.glowColor, 0.3);
             this.glowEffect.setBlendMode(Phaser.BlendModes.ADD);
             
             // Create particle ring for power pellets
             this.createPowerPelletEffects();
         } else {
             // Subtle glow for normal pellets
-            this.glowEffect = this.scene.add.circle(this.x, this.y, 4, this.glowColor, 0.15);
+            this.glowEffect = this.scene.add.circle(this.x, this.y, 6, this.glowColor, 0.15);
             this.glowEffect.setBlendMode(Phaser.BlendModes.ADD);
         }
     }
@@ -61,7 +61,7 @@ class Pellet {
         
         for (let i = 0; i < sparkleCount; i++) {
             const angle = (i / sparkleCount) * Math.PI * 2;
-            const radius = 15;
+            const radius = 20;
             const sparkleX = this.x + Math.cos(angle) * radius;
             const sparkleY = this.y + Math.sin(angle) * radius;
             
@@ -353,12 +353,14 @@ class PelletManager {
         this.powerPellets = [];
         this.totalPellets = 0;
         this.eatenPellets = 0;
+        this.initialized = false;
         
         console.log('🔸 PelletManager initialized');
     }
 
     // Create pellets based on maze layout
     createPelletsFromMaze(maze, tileSize) {
+        console.log('🔸 Creating pellets from maze...');
         this.clearAllPellets();
         
         for (let y = 0; y < maze.length; y++) {
@@ -379,11 +381,17 @@ class PelletManager {
         }
         
         this.totalPellets = this.pellets.length;
-        console.log(`🔸 Created ${this.pellets.length} pellets (${this.powerPellets.length} power)`);
+        this.eatenPellets = 0;
+        this.initialized = true;
+        
+        console.log(`🔸 Created ${this.pellets.length} pellets (${this.powerPellets.length} power pellets)`);
+        console.log(`🔸 Total pellets to collect: ${this.totalPellets}`);
     }
 
     // Update all pellets
     update(deltaTime) {
+        if (!this.initialized) return;
+        
         this.pellets.forEach(pellet => {
             if (pellet && pellet.isVisible) {
                 pellet.update(deltaTime);
@@ -393,6 +401,8 @@ class PelletManager {
 
     // Check collision with player
     checkPlayerCollision(playerX, playerY, collisionRadius = 10) {
+        if (!this.initialized) return [];
+        
         const eatenPellets = [];
         
         this.pellets.forEach(pellet => {
@@ -400,6 +410,14 @@ class PelletManager {
                 if (pellet.onEaten()) {
                     eatenPellets.push(pellet);
                     this.eatenPellets++;
+                    
+                    // Handle scoring here
+                    const scoreSystem = this.scene.scoreSystem;
+                    if (pellet.isPowerPellet()) {
+                        scoreSystem?.scorePowerPelletEaten();
+                    } else {
+                        scoreSystem?.scorePelletEaten();
+                    }
                 }
             }
         });
@@ -409,17 +427,34 @@ class PelletManager {
 
     // Get remaining pellets
     getRemainingCount() {
+        if (!this.initialized) return 0;
         return this.totalPellets - this.eatenPellets;
+    }
+
+    // Get total pellets
+    getTotalCount() {
+        return this.totalPellets;
+    }
+
+    // Get eaten pellets count
+    getEatenCount() {
+        return this.eatenPellets;
     }
 
     // Check if level complete
     isLevelComplete() {
-        return this.eatenPellets >= this.totalPellets;
+        if (!this.initialized || this.totalPellets === 0) return false;
+        
+        const remaining = this.getRemainingCount();
+        console.log(`🔸 Level completion check: ${this.eatenPellets}/${this.totalPellets} eaten, ${remaining} remaining`);
+        
+        return remaining <= 0;
     }
 
     // Get completion percentage
     getCompletionPercentage() {
-        return this.totalPellets > 0 ? (this.eatenPellets / this.totalPellets) : 0;
+        if (!this.initialized || this.totalPellets === 0) return 0;
+        return this.eatenPellets / this.totalPellets;
     }
 
     // Clear all pellets
@@ -429,6 +464,9 @@ class PelletManager {
         this.powerPellets = [];
         this.totalPellets = 0;
         this.eatenPellets = 0;
+        this.initialized = false;
+        
+        console.log('🔸 All pellets cleared');
     }
 
     // Reset pellets for new level
@@ -437,6 +475,8 @@ class PelletManager {
             pellet.show();
         });
         this.eatenPellets = 0;
+        
+        console.log('🔸 Pellets reset for new attempt');
     }
 
     // Flash all remaining pellets
@@ -467,8 +507,19 @@ class PelletManager {
             remaining: this.getRemainingCount(),
             powerPellets: this.powerPellets.length,
             normalPellets: this.pellets.length - this.powerPellets.length,
-            completionPercentage: this.getCompletionPercentage()
+            completionPercentage: this.getCompletionPercentage(),
+            initialized: this.initialized
         };
+    }
+
+    // Debug method
+    debugStats() {
+        const stats = this.getStats();
+        console.log('=== PELLET MANAGER DEBUG ===');
+        Object.keys(stats).forEach(key => {
+            console.log(`${key}: ${stats[key]}`);
+        });
+        console.log('===========================');
     }
 }
 
