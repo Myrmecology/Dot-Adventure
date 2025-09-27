@@ -78,7 +78,7 @@ class Player {
         this.updateAnimation(deltaTime);
         this.updateVisualEffects(deltaTime);
         this.updateInvulnerability(deltaTime);
-        this.checkCollisions();
+        // Note: Collision checking is now handled by GameScene
     }
 
     handleInput() {
@@ -124,7 +124,7 @@ class Player {
             } else if (!this.isMoving) {
                 // If not currently moving, try to start moving in the requested direction
                 // with a more lenient check
-                const lenientCheck = this.canMove(currentX + this.nextDirection.x * 2, currentY + this.nextDirection.y * 2, this.nextDirection);
+                const lenientCheck = this.canMove(currentX + this.nextDirection.x * 4, currentY + this.nextDirection.y * 4, this.nextDirection);
                 if (lenientCheck) {
                     this.direction = { ...this.nextDirection };
                     this.nextDirection = { x: 0, y: 0 };
@@ -173,23 +173,21 @@ class Player {
         }
 
         // Calculate the position we're trying to move to
-        const buffer = 8; // Collision buffer
+        const buffer = 6; // Smaller collision buffer for better movement
         const checkX = x + (direction.x * buffer);
         const checkY = y + (direction.y * buffer);
 
-        // Check multiple points for better collision detection
+        // Check center point and corners for collision
         const points = [
-            { x: checkX - 6, y: checkY - 6 },
-            { x: checkX + 6, y: checkY - 6 },
-            { x: checkX - 6, y: checkY + 6 },
-            { x: checkX + 6, y: checkY + 6 },
-            { x: checkX, y: checkY }
+            { x: checkX, y: checkY }, // Center
+            { x: checkX - 8, y: checkY - 8 }, // Top-left
+            { x: checkX + 8, y: checkY - 8 }, // Top-right
+            { x: checkX - 8, y: checkY + 8 }, // Bottom-left
+            { x: checkX + 8, y: checkY + 8 }  // Bottom-right
         ];
 
-        // If any point is not a wall, we can move
-        const canMove = points.some(point => !levelManager.isWall(point.x, point.y));
-        
-        return canMove;
+        // All points must be clear of walls
+        return points.every(point => !levelManager.isWall(point.x, point.y));
     }
 
     snapToGrid() {
@@ -288,35 +286,22 @@ class Player {
         }
     }
 
+    // These methods are kept for backward compatibility but pellet collision is now handled in GameScene
     checkCollisions() {
-        const levelManager = this.scene.levelManager;
-        if (!levelManager) return;
-
-        // Check for pellet collisions
-        const pelletType = levelManager.eatPellet(this.sprite.x, this.sprite.y);
-        if (pelletType) {
-            this.onPelletEaten(pelletType);
-        }
+        // Legacy method - collision checking now handled by GameScene for better coordination
     }
 
     onPelletEaten(pelletType) {
-        const scoreSystem = this.scene.scoreSystem;
+        // This method is called by GameScene when a pellet is eaten
         const soundManager = this.scene.soundManager;
 
         if (pelletType === 'pellet') {
-            scoreSystem?.scorePelletEaten();
             soundManager?.playPelletEat();
             this.createPelletEffect();
         } else if (pelletType === 'powerPellet') {
-            scoreSystem?.scorePowerPelletEaten();
             soundManager?.playPowerPelletEat();
             this.activatePowerMode();
             this.scene.events.emit('powerPelletEaten');
-        }
-
-        // Check if level is complete
-        if (levelManager.isLevelComplete()) {
-            this.scene.events.emit('levelComplete');
         }
     }
 
@@ -392,6 +377,7 @@ class Player {
         this.invulnerabilityTime = 2000; // 2 seconds of invulnerability
         this.direction = { x: 0, y: 0 };
         this.nextDirection = { x: 0, y: 0 };
+        this.isMoving = false;
         
         // Reset visual state
         this.sprite.setScale(1);
@@ -432,6 +418,11 @@ class Player {
         return this.facing;
     }
 
+    // Check if player is actually moving (has direction and isMoving flag)
+    isActuallyMoving() {
+        return this.isMoving && (this.direction.x !== 0 || this.direction.y !== 0);
+    }
+
     // Update death animation
     updateDeathAnimation(deltaTime) {
         // Death animation is handled by tween, nothing to update here
@@ -452,15 +443,25 @@ class Player {
     // Debug helpers
     debug() {
         console.log('=== PLAYER DEBUG ===');
-        console.log('Position:', this.sprite.x, this.sprite.y);
+        console.log('Position:', this.sprite.x.toFixed(1), this.sprite.y.toFixed(1));
         console.log('Direction:', this.direction);
         console.log('Next Direction:', this.nextDirection);
         console.log('Speed:', this.speed);
         console.log('Moving:', this.isMoving);
+        console.log('Actually Moving:', this.isActuallyMoving());
         console.log('Dead:', this.isDead);
         console.log('Invulnerable:', this.isInvulnerable);
         console.log('Facing:', this.facing);
         console.log('Debug Free Move:', this.debugFreeMove);
+        
+        // Show grid position
+        const levelManager = this.scene.levelManager;
+        if (levelManager) {
+            const tileSize = levelManager.getTileSize();
+            const gridX = Math.floor(this.sprite.x / tileSize);
+            const gridY = Math.floor(this.sprite.y / tileSize);
+            console.log('Grid Position:', gridX, gridY);
+        }
         console.log('==================');
     }
 }
