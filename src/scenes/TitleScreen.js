@@ -11,6 +11,7 @@ class TitleScreen extends Phaser.Scene {
         this.titleAnimationPhase = 0;
         this.particleSystem = null;
         this.backgroundElements = [];
+        this.dialogOpen = false; // Track dialog state
         
         console.log('📺 TitleScreen scene constructed');
     }
@@ -18,8 +19,9 @@ class TitleScreen extends Phaser.Scene {
     preload() {
         console.log('📺 TitleScreen preloading...');
         
-        // Since we don't have actual image files yet, we'll create procedural graphics
-        // This will be replaced with actual assets later
+        // Load high scores
+        this.loadHighScores();
+        
         this.load.on('complete', () => {
             console.log('✅ TitleScreen preload complete');
         });
@@ -54,10 +56,17 @@ class TitleScreen extends Phaser.Scene {
             this.soundManager.playGameStart();
         }
         
-        // Auto-start after delay for development (can be removed later)
-        // this.time.delayedCall(3000, () => this.startGame());
-        
         console.log('✅ TitleScreen created');
+    }
+
+    loadHighScores() {
+        try {
+            const stored = localStorage.getItem('dotAdventure_highScores');
+            this.highScoreData = stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.warn('Failed to load high scores:', error);
+            this.highScoreData = [];
+        }
     }
 
     createAnimatedBackground() {
@@ -308,6 +317,20 @@ class TitleScreen extends Phaser.Scene {
                 ease: 'Power2.out'
             });
             
+            // Make interactive
+            menuItem.setInteractive();
+            menuItem.on('pointerover', () => {
+                if (!this.dialogOpen) { // Only allow menu interaction when no dialog is open
+                    this.selectedOption = index;
+                    this.updateMenuSelection();
+                }
+            });
+            menuItem.on('pointerdown', () => {
+                if (!this.dialogOpen) { // Only allow menu interaction when no dialog is open
+                    this.selectMenuItem();
+                }
+            });
+            
             this.menuItems.push(menuItem);
         });
         
@@ -394,20 +417,6 @@ class TitleScreen extends Phaser.Scene {
         
         // WASD keys
         this.wasd = this.input.keyboard.addKeys('W,S,A,D');
-        
-        // Mouse/touch input for menu items
-        this.menuItems.forEach((item, index) => {
-            item.setInteractive();
-            
-            item.on('pointerover', () => {
-                this.selectedOption = index;
-                this.updateMenuSelection();
-            });
-            
-            item.on('pointerdown', () => {
-                this.selectMenuItem();
-            });
-        });
     }
 
     setupSoundManager() {
@@ -418,13 +427,17 @@ class TitleScreen extends Phaser.Scene {
     update(time, deltaTime) {
         this.animationTimer += deltaTime;
         
-        // Handle input
-        this.handleInput();
+        // Handle input only if no dialog is open
+        if (!this.dialogOpen) {
+            this.handleInput();
+        } else {
+            this.handleDialogInput();
+        }
         
         // Update particle effects
         this.updateParticleEffects(deltaTime);
         
-        // Update background animations
+        // Update background effects
         this.updateBackgroundEffects(deltaTime);
     }
 
@@ -447,7 +460,25 @@ class TitleScreen extends Phaser.Scene {
         }
     }
 
+    handleDialogInput() {
+        // Handle input when dialog is open
+        if (Phaser.Input.Keyboard.JustDown(this.escapeKey)) {
+            this.hideDialog();
+        }
+        
+        // Handle settings-specific input
+        if (this.currentDialog === 'settings') {
+            if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey('S'))) {
+                DotAdventure.toggleSound();
+                this.hideDialog();
+                this.showSettings(); // Refresh settings
+            }
+        }
+    }
+
     navigateMenu(direction) {
+        if (this.dialogOpen) return; // Don't navigate menu when dialog is open
+        
         this.selectedOption += direction;
         
         if (this.selectedOption < 0) {
@@ -489,6 +520,8 @@ class TitleScreen extends Phaser.Scene {
     }
 
     selectMenuItem() {
+        if (this.dialogOpen) return; // Don't select menu items when dialog is open
+        
         const selectedMenuItem = this.menuOptions[this.selectedOption];
         
         // Play selection sound
@@ -533,13 +566,11 @@ class TitleScreen extends Phaser.Scene {
     }
 
     showHighScores() {
-        // Simple high scores display (could be expanded later)
-        const scoreSystem = new ScoreSystem(this);
-        const highScores = scoreSystem.getHighScores();
-        
+        // Simple high scores display
         let scoresText = 'HIGH SCORES\n\n';
-        if (highScores.length > 0) {
-            highScores.forEach((score, index) => {
+        
+        if (this.highScoreData.length > 0) {
+            this.highScoreData.slice(0, 10).forEach((score, index) => {
                 const date = new Date(score.date).toLocaleDateString();
                 scoresText += `${index + 1}. ${score.score.toLocaleString()} - Level ${score.level} (${date})\n`;
             });
@@ -551,19 +582,12 @@ class TitleScreen extends Phaser.Scene {
     }
 
     showSettings() {
-        const settingsText = 'SETTINGS\n\nSound: ' + 
-            (DotAdventure.isSoundEnabled() ? 'ON' : 'OFF') + 
-            '\n\nPress S to toggle sound\nPress ESC to return';
+        const settingsText = 'SETTINGS\n\n' +
+            'Sound: ' + (DotAdventure.isSoundEnabled() ? 'ON' : 'OFF') + '\n\n' +
+            'Press S to toggle sound\n' +
+            'Press ESC to return to menu';
         
-        this.showDialog('Settings', settingsText);
-        
-        // Handle settings input
-        const sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        sKey.once('down', () => {
-            DotAdventure.toggleSound();
-            this.hideDialog();
-            this.showSettings(); // Refresh
-        });
+        this.showDialog('Settings', settingsText, 'settings');
     }
 
     showCredits() {
@@ -573,54 +597,102 @@ class TitleScreen extends Phaser.Scene {
             'Sound Effects: Procedural Audio\n' +
             'Graphics: Custom Rendered\n\n' +
             'Thank you for playing!\n\n' +
-            'Press ESC to return';
+            'Press ESC to return to menu';
         
         this.showDialog('Credits', creditsText);
     }
 
-    showDialog(title, content) {
+    showDialog(title, content, dialogType = null) {
+        // Prevent multiple dialogs
+        if (this.dialogOpen) {
+            this.hideDialog();
+        }
+        
+        this.dialogOpen = true;
+        this.currentDialog = dialogType;
+        
         // Create modal dialog
-        this.dialogBg = this.add.rectangle(
+        this.dialog = this.add.container(0, 0);
+        
+        const dialogBg = this.add.rectangle(
             this.sys.game.config.width / 2,
             this.sys.game.config.height / 2,
-            500, 400,
-            0x000000, 0.9
-        ).setStrokeStyle(2, 0x00ff41);
+            600, 450,
+            0x000000, 0.95
+        ).setStrokeStyle(3, 0x00ff41);
         
-        this.dialogTitle = this.add.text(
+        const dialogTitle = this.add.text(
             this.sys.game.config.width / 2,
-            this.sys.game.config.height / 2 - 150,
+            this.sys.game.config.height / 2 - 170,
             title,
             {
-                fontSize: '24px',
+                fontSize: '28px',
                 fontFamily: 'Orbitron',
                 fill: '#00ff41'
             }
         ).setOrigin(0.5);
         
-        this.dialogContent = this.add.text(
+        const dialogContent = this.add.text(
             this.sys.game.config.width / 2,
             this.sys.game.config.height / 2 - 50,
             content,
             {
-                fontSize: '14px',
+                fontSize: '16px',
                 fontFamily: 'Orbitron',
                 fill: '#ffffff',
                 align: 'center',
-                wordWrap: { width: 450 }
+                lineSpacing: 8,
+                wordWrap: { width: 550 }
             }
         ).setOrigin(0.5);
         
-        // ESC to close
-        this.escapeKey.once('down', () => {
-            this.hideDialog();
+        // Close instruction
+        const closeText = this.add.text(
+            this.sys.game.config.width / 2,
+            this.sys.game.config.height / 2 + 150,
+            'Press ESC to close',
+            {
+                fontSize: '14px',
+                fontFamily: 'Orbitron',
+                fill: '#888888'
+            }
+        ).setOrigin(0.5);
+        
+        this.dialog.add([dialogBg, dialogTitle, dialogContent, closeText]);
+        
+        // Animate dialog in
+        this.dialog.setScale(0);
+        this.tweens.add({
+            targets: this.dialog,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 300,
+            ease: 'Back.out'
         });
+        
+        console.log(`📺 Dialog opened: ${title}`);
     }
 
     hideDialog() {
-        if (this.dialogBg) this.dialogBg.destroy();
-        if (this.dialogTitle) this.dialogTitle.destroy();
-        if (this.dialogContent) this.dialogContent.destroy();
+        if (!this.dialogOpen || !this.dialog) return;
+        
+        // Animate dialog out
+        this.tweens.add({
+            targets: this.dialog,
+            scaleX: 0,
+            scaleY: 0,
+            duration: 200,
+            ease: 'Back.in',
+            onComplete: () => {
+                if (this.dialog) {
+                    this.dialog.destroy();
+                    this.dialog = null;
+                }
+                this.dialogOpen = false;
+                this.currentDialog = null;
+                console.log('📺 Dialog closed');
+            }
+        });
     }
 
     updateParticleEffects(deltaTime) {
@@ -690,6 +762,9 @@ class TitleScreen extends Phaser.Scene {
             }
         });
         this.backgroundElements = [];
+        
+        // Clean up dialog
+        this.hideDialog();
         
         console.log('📺 TitleScreen scene shutdown');
     }
