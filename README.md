@@ -1,5 +1,7 @@
 ## Welcome to Dot Adventure ##
 
+For a video demo of this project, please visit: https://www.youtube.com/watch?v=WDVHq_htYPM 
+
 This is a work in progress. This ia a JavaScript Pac-Man clone. If you want to play around with it, all you need to do 
 is clone this repo https://github.com/Myrmecology/Dot-Adventure.git next, you will need to npm install, after that you will need 
 to open up a terminal in VS Code and type npm start, this will open Dot Adventure in a browser. You can control your character with (A,W,S,D) or just use the arrow keys, your choice. This project was made with Phaser.js, HTML, JavaScript, and CSS. 
