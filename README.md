@@ -43,4 +43,6 @@ Again, Dot Adventure is a work in progress.
 *Crafted with* ❤️ *by a passionate developer*
 
 ---
-Happy coding 
+Future changes: Larger play area, correct ghost physics, lot's of levels, themed levels, and easter eggs. 
+
+Happy coding
