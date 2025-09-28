@@ -140,7 +140,7 @@ class GameScene extends Phaser.Scene {
             const ghost = new Ghost(this, spawn.x, spawn.y, {
                 color: spawn.color,
                 personality: personalities[index % personalities.length],
-                speed: 80 + Math.random() * 20
+                speed: 60 + Math.random() * 20 // Slightly slower ghosts
             });
             this.ghosts.push(ghost);
         });
@@ -296,9 +296,19 @@ class GameScene extends Phaser.Scene {
             const playerPos = this.player.getPosition();
             const eatenPellets = this.pelletManager.checkPlayerCollision(playerPos.x, playerPos.y, 16);
             
+            // Handle each eaten pellet with sound
             eatenPellets.forEach(pellet => {
                 if (pellet.isPowerPellet()) {
+                    // Power pellet eaten
+                    this.soundManager.playPowerPelletEat();
+                    this.player.onPelletEaten('powerPellet');
                     this.events.emit('powerPelletEaten');
+                    console.log('🔸 Power pellet eaten with sound!');
+                } else {
+                    // Normal pellet eaten
+                    this.soundManager.playPelletEat();
+                    this.player.onPelletEaten('pellet');
+                    console.log('🔸 Normal pellet eaten with sound!');
                 }
             });
         }
@@ -397,6 +407,12 @@ class GameScene extends Phaser.Scene {
                 this.player.debug();
             }
             console.log('🐛 Pellet Manager Stats:', this.pelletManager.getStats());
+        }
+        
+        // Test sound key
+        if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey('T'))) {
+            console.log('🐛 Debug: Test sound');
+            this.soundManager.playPelletEat();
         }
     }
 
@@ -503,7 +519,7 @@ class GameScene extends Phaser.Scene {
     // Power mode system
     activatePowerMode() {
         this.powerModeActive = true;
-        this.powerModeTimer = 10000; // 10 seconds
+        this.powerModeTimer = 8000; // 8 seconds
         
         // Make all ghosts frightened
         this.ghosts.forEach(ghost => {
@@ -512,11 +528,6 @@ class GameScene extends Phaser.Scene {
         
         // Visual effects
         this.cameras.main.flash(300, 255, 255, 0);
-        
-        // Play power pellet sound
-        if (this.soundManager) {
-            this.soundManager.playPowerPelletEat();
-        }
         
         console.log('⚡ Power mode activated');
     }
